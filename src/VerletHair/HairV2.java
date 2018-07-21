@@ -11,7 +11,7 @@ import java.util.List;
 
 public class HairV2 {
     private final PApplet papplet;
-    private int chainnum = 100;
+    public int chainnum = 100;
 
     private VerletPhysics2D physics;
     public List<Chain> chains;
@@ -24,7 +24,7 @@ public class HairV2 {
         chainnum = hairNum;
         chains = new ArrayList<Chain>(chainnum);
         physics = new VerletPhysics2D();
-        physics.addBehavior(new GravityBehavior2D(new Vec2D(0, 1.5f)));
+        physics.addBehavior(new GravityBehavior2D(new Vec2D(0, 0.2f)));
         physics.setWorldBounds(new Rect(0, 0, papplet.width, papplet.height));
 
         for (int i = 0; i < chainnum; i++) {
@@ -51,6 +51,7 @@ public class HairV2 {
     {
         for(Chain chain : chains)
         {
+            chain.addNode();
         }
     }
 
@@ -61,7 +62,6 @@ public class HairV2 {
 
         VerletParticle2D head;
         List<VerletParticle2D> ParticlesList;
-        VerletParticle2D particle;
 
         Chain(float len, int num, float _strength, Vec2D initPos) {
 
@@ -74,7 +74,7 @@ public class HairV2 {
             ParticlesList = new ArrayList<VerletParticle2D>();
 
             for (int i = 0; i < numPoints; i++) {
-                particle = new VerletParticle2D(initPos.x, initPos.y + i * deltalen);
+                VerletParticle2D particle = new VerletParticle2D(initPos.x, initPos.y + i * deltalen);
                 physics.addParticle(particle);
                 ParticlesList.add(particle);
 
@@ -94,6 +94,13 @@ public class HairV2 {
 
         public void addNode()
         {
+            VerletParticle2D particle = new VerletParticle2D(ParticlesList.get(ParticlesList.size()-1).x, ParticlesList.get(ParticlesList.size()-1).y + 5);
+            physics.addParticle(particle);
+            ParticlesList.add(particle);
+
+            VerletParticle2D previous = ParticlesList.get(ParticlesList.size() - 1);
+            VerletSpring2D spring = new VerletSpring2D(previous, particle, 5, strength);
+            physics.addSpring(spring);
         }
     }
 }
