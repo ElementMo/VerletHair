@@ -11,7 +11,7 @@ import java.util.List;
 
 public class Hair {
     private final PApplet p;
-    private int chainnum = 100;
+    public int chainnum = 100;
 
     private VerletPhysics2D physics;
     private Chain[] chains;
