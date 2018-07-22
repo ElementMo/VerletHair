@@ -21,7 +21,9 @@ public class HairV2 {
     public List<Chain> chains;
 
     private boolean hairDrop = false;
-    private int tick;
+    private int clearTick;
+    private int growCount = 0;
+    private int growTick = 0;
 
     public HairV2(PApplet p) {
         this.papplet = p;
@@ -31,17 +33,17 @@ public class HairV2 {
         chainnum = hairNum;
         chains = new ArrayList<Chain>(chainnum);
         physics = new VerletPhysics2D();
-        physics.addBehavior(new GravityBehavior2D(new Vec2D(0, 0.9f)));
+        physics.addBehavior(new GravityBehavior2D(new Vec2D(0, 0.6f)));
 //        physics.setWorldBounds(new Rect(0, 0, papplet.width, papplet.height));
 
         for (int i = 0; i < chainnum; i++) {
             chains.add(new Chain((int) papplet.random(hairLen, hairLen + 32), hairLen / 8, 1, new Vec2D(initPos[i].x + i * 1, initPos[i].y)));
         }
         hairDrop = false;
-        tick = 0;
+        clearTick = 0;
     }
 
-    public void update(PVector[] poses) {
+    private void update(PVector[] poses) {
         physics.update();
 
         if (!hairDrop) {
@@ -52,13 +54,13 @@ public class HairV2 {
         display();
     }
 
-    public void display() {
+    private void display() {
         for (VerletSpring2D i : physics.springs) {
             papplet.line(i.a.x, i.a.y, i.b.x, i.b.y);
         }
     }
 
-    public void addNode() {
+    private void addNode() {
         if (physics.springs.size() < 1000) {
             for (Chain chain : chains) {
                 chain.addNode();
@@ -66,11 +68,11 @@ public class HairV2 {
         }
     }
 
-    public void removeNode() {
-        tick++;
+    private void removeNode() {
+        clearTick++;
         hairDrop = true;
 //        System.out.println(physics.springs.size() + " " + chainnum);
-        if (tick > 50) {
+        if (clearTick > 50) {
             for (int i = physics.springs.size() - 1; i >= 0; i--) {
                 VerletSpring2D tailSping = physics.springs.get(i);
                 physics.removeSpringElements(tailSping);
@@ -86,6 +88,45 @@ public class HairV2 {
 //        }
     }
 
+    public void drawGrowingHair(float pheadCenterx, PVector headCenter, PVector[] poses)
+    {
+//        for (int i = chainnum - 1; i >= 0; i--) {
+//            poses[i] = PVector.add(new PVector(headCenter.x, headCenter.y), PVector.mult(new PVector(papplet.cos(-papplet.PI / chainnum * i), papplet.sin(-papplet.PI / chainnum * i)), 50));
+//        }
+        update(poses);
+        display();
+
+        if ((pheadCenterx - headCenter.x) > 6) {
+            growCount += 12;
+        } else if ((pheadCenterx - headCenter.x) < 1 && growCount > 0) {
+            growCount--;
+        }
+        if (growCount > 0) {
+            growTick++;
+            if (growTick > 20) {
+                growHair(poses);
+                growTick = 0;
+            }
+        }
+        if (growCount == 0) {
+            deteteHair();
+        }
+//        papplet.println(growCount);
+    }
+
+    private void growHair(PVector[] poses) {
+        if (physics.springs.size() == 0) {
+            config(chainnum, 8, poses);
+            addNode();
+
+        } else {
+            addNode();
+        }
+    }
+
+    private void deteteHair() {
+        removeNode();
+    }
     class Chain {
         float totalLength;
         int numPoints;
