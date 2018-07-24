@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="geomeritive">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/geomeritive" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <jarDirectory url="file://$PROJECT_DIR$/geomeritive" recursive="false" />
+  </library>
+</component>

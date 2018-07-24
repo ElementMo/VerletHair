@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="box2d">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/box2d" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/box2d" />
+    </SOURCES>
+    <jarDirectory url="file://$PROJECT_DIR$/box2d" recursive="false" />
+    <jarDirectory url="file://$PROJECT_DIR$/box2d" recursive="false" type="SOURCES" />
+  </library>
+</component>
