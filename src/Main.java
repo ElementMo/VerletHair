@@ -15,6 +15,7 @@ public class Main extends PApplet {
     public void setup() {
         st = new Shit(this);
         frameRate(100);
+        map()
     }
 
     public void draw() {
