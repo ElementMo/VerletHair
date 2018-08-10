@@ -15,7 +15,7 @@ public class Main extends PApplet {
     public void setup() {
         st = new Shit(this);
         frameRate(100);
-        map()
+        surface.setResizable(false);
     }
 
     public void draw() {

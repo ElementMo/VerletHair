@@ -1,5 +1,6 @@
 package VerletHair;
 
+import org.jbox2d.collision.Collision;
 import processing.core.*;
 import toxi.geom.Rect;
 import toxi.physics2d.*;
